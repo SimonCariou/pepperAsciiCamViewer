@@ -9,3 +9,7 @@ Use:
 ```
 python pepperAsciiCam.py 192.168.1.38  
 ```
+
+## Example
+
+![](terminalRecording.gif)
