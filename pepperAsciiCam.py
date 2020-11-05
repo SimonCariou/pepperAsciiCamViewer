@@ -34,7 +34,7 @@ class pepperCam:
 
 	def run(self):
 		self.cameraSubscriber = self.camera.subscribeCamera("peppercam", self.AL_kTopCamera, self.AL_kQVGA, self.AL_kBGRColorSpace, self.fps)
-		print self.cameraSubscriber
+		print(self.cameraSubscriber)
 
 		#set image size for the entire loop:
 		result = self.camera.getImageRemote(self.cameraSubscriber)
@@ -48,26 +48,26 @@ class pepperCam:
 				result = self.camera.getImageRemote(self.cameraSubscriber)
 				#image capture state verification:
 				if result == None:
-					print 'cannot capture.'
+					print('cannot capture.')
 				elif result[6] == None:
-					print 'no image data string.'
+					print('no image data string.')
 				else:
-					print 'Image captured'
+					print('Image captured')
 					# result[6] is the image data
 					imageArray = result[6]
-					print self.viewAscii(imageArray)
+					print(self.viewAscii(imageArray))
 					#sleep for the amount of time given in the variable fps
 					time.sleep(0.1)
 
 			except KeyboardInterrupt:
-				print "Unsubscribing..."
+				print("Unsubscribing...")
 				self.camera.unsubscribe(self.cameraSubscriber)
-				print "done"
+				print("done")
 				break
 
 	def viewAscii(self, imgArray):
 		image_string = str(bytearray(imgArray))
-		img = Image.fromstring("RGB", (self.imageWidth, self.imageHeight), image_string) 
+		img = Image.frombytes("RGB", (self.imageWidth, self.imageHeight), image_string) 
 		aspect_ratio = self.imageWidth/self.imageHeight
 		#mofif the image size to be displayed fine in the terminal
 		new_width = 120
