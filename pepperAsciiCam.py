@@ -21,14 +21,12 @@ class pepperCam:
 		#variables related to the image size
 		self.imageWidth = None
 		self.imageHeight = None
-		self.imageArray = None
 
 		#naoqi authentication + camera instanciation
 		self.authenticate(url, user, pswd)
 		self.camera = self.session.service("ALVideoDevice")
 
 	def authenticate(self, url, user, pswd):
-	#url, user, pswd = parse_options()
 		factory = ClientFactory(user, pswd)
 		self.session = qi.Session()
 		self.session.setClientAuthenticatorFactory(factory)
@@ -56,8 +54,8 @@ class pepperCam:
 				else:
 					print 'Image captured'
 					# result[6] is the image data
-					self.imageArray = result[6]
-					self.viewAscii(self.imageArray)
+					imageArray = result[6]
+					print self.viewAscii(imageArray)
 					#sleep for the amount of time given in the variable fps
 					time.sleep(0.1)
 
@@ -69,17 +67,17 @@ class pepperCam:
 
 	def viewAscii(self, imgArray):
 		image_string = str(bytearray(imgArray))
-
 		img = Image.fromstring("RGB", (self.imageWidth, self.imageHeight), image_string) 
 		aspect_ratio = self.imageWidth/self.imageHeight
+		#mofif the image size to be displayed fine in the terminal
 		new_width = 120
 		new_height = aspect_ratio * new_width * 0.55
 		img = img.resize((new_width, int(new_height)))
 		img = img.convert('L')
 		pixels = img.getdata()
 
-		# replace each pixel with a character from array
-		chars = " .^-;~=+*#%@"
+		# replace each pixel with a character from the array
+		chars = " .:!*%$@&#!SB"
 		new_pixels = [chars[pixel//25] for pixel in pixels]
 		new_pixels = ''.join(new_pixels)
 
@@ -87,7 +85,7 @@ class pepperCam:
 		new_pixels_count = len(new_pixels)
 		ascii_image = [new_pixels[index:index + new_width] for index in range(0, new_pixels_count, new_width)]
 		ascii_image = "\n".join(ascii_image)
-		print ascii_image
+		return ascii_image
 
 #######
 
